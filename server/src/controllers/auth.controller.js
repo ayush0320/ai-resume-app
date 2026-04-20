@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const tokenBlacklistModel = require("../models/blacklist.model.js");
 
 //===============================
 // User Registration Controller
@@ -119,7 +120,63 @@ async function loginUser(req, res) {
   }
 }
 
+//===============================
+// User Logout Controller
+//===============================
+
+// Implement the logoutUser function to invalidate the JWT token (e.g., by adding it to a blacklist) and clear the cookie
+/**
+ * @name logoutUser
+ * @desc Logout a user by invalidating the JWT token (e.g., by adding it to a blacklist) and clearing the cookie
+ * @route GET /api/auth/logout
+ * @access Public
+ */
+async function logoutUser(req, res) {
+  const token = req.cookies.token;
+
+  try {
+    if (token) {
+      // Add the token to the blacklist
+      await tokenBlacklistModel.create({ token });
+
+      // Clear the token cookie
+      res.clearCookie("token");
+
+      return res.status(200).json({
+        message: "User logged out successfully",
+      });
+    }
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    return res.status(500).json({ message: "Error logging out user" });
+  }
+}
+
+//===============================
+// User Profile Controller
+//===============================
+
+async function getUserProfile(req, res) {
+  try {
+    const user = await userModel.findById(req.user.id);
+
+    res.status(200).json({
+      message: "User profile retrieved successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Error retrieving user profile:", error);
+    return res.status(500).json({ message: "Error retrieving user profile" });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  logoutUser,
+  getUserProfile,
 };
