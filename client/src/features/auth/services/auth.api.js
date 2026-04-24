@@ -10,7 +10,7 @@ const api = axios.create({
 });
 
 // Base URL for the authentication API
-export async function register(username, email, password) {
+export async function register({ username, email, password }) {
   try {
     const response = await api.post("/register", {
       username,
@@ -25,7 +25,7 @@ export async function register(username, email, password) {
 }
 
 // Function to handle user login
-export async function login(email, password) {
+export async function login({ email, password }) {
   try {
     const response = await api.post("/login", {
       email,

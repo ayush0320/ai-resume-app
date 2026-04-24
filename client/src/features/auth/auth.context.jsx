@@ -5,6 +5,7 @@
 // as well as any relevant user information.
 
 import { createContext, use, useState } from "react";
+import { getProfile } from "./services/auth.api";
 
 // The context will hold the authentication state and any relevant user information
 export const AuthContext = createContext({});
@@ -14,7 +15,7 @@ export const AuthContext = createContext({});
 // to be used by the components that need to access or modify the authentication state.
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // to store the authenticated user's information
-  const [loading, setLoading] = useState(false); // to indicate whether the authentication process is in progress
+  const [loading, setLoading] = useState(true); // to indicate whether the authentication process is in progress
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
