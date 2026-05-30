@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -23,4 +23,4 @@ const userSchema = new mongoose.Schema({
 // This will create a collection named "users" in the MongoDB database
 const userModel = mongoose.model("User", userSchema);
 
-module.exports = userModel;
+export default userModel;

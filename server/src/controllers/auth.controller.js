@@ -1,7 +1,7 @@
-const userModel = require("../models/user.model.js");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const tokenBlacklistModel = require("../models/blacklist.model.js");
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import tokenBlacklistModel from "../models/blacklist.model.js";
 
 //===============================
 // User Registration Controller
@@ -174,9 +174,4 @@ async function getUserProfile(req, res) {
   }
 }
 
-module.exports = {
-  registerUser,
-  loginUser,
-  logoutUser,
-  getUserProfile,
-};
+export default { registerUser, loginUser, logoutUser, getUserProfile };

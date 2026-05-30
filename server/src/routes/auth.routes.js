@@ -1,6 +1,6 @@
-const express = require("express");
-const authController = require("../controllers/auth.controller.js");
-const authMiddleware = require("../middleware/auth.middleware.js");
+import express from "express";
+import authController from "../controllers/auth.controller.js";
+import authMiddleware from "../middleware/auth.middleware.js";
 
 //-------------------------------
 
@@ -43,4 +43,4 @@ authRouter.get("/logout", authController.logoutUser);
  */
 authRouter.get("/profile", authMiddleware, authController.getUserProfile);
 
-module.exports = authRouter;
+export default authRouter;
