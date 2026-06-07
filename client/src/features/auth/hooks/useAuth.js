@@ -67,9 +67,14 @@ export const useAuth = () => {
   // useEffect to fetch the user's profile information when the component mounts
   useEffect(() => {
     const getAndSetUser = async () => {
-      const data = await getProfile();
-      setUser(data.user);
-      setLoading(false);
+      try {
+        const data = await getProfile();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to fetch profile on mount:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getAndSetUser();
