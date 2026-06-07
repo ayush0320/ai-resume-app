@@ -1,6 +1,6 @@
 // Authentication middleware to protect routes and verify JWT tokens
-import jwt from "jsonwebtoken";
-import tokenBlacklistModel from "../models/blacklist.model.js";
+const jwt = require("jsonwebtoken");
+const tokenBlacklistModel = require("../models/blacklist.model.js");
 
 async function authUser(req, res, next) {
   const token = req.cookies.token;
@@ -33,4 +33,6 @@ async function authUser(req, res, next) {
   }
 }
 
-export default authUser;
+module.exports = {
+  authUser,
+};

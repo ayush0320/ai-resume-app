@@ -1,53 +1,22 @@
-import mongoose from "mongoose";
-
-/*
-* job descript schema : String
-* resume text : String
-* self description : String
-* matchScore : Number
-
-* technical questions : 
-[{
-    question : "",
-    intention : "",
-    feedback : ""
-}]
-* behavioral questions : 
-[{
-    question : "",
-    intention : "",
-    feedback : ""
-}]
-* skill gaps : [{
-    skills : "",
-    severity : "",
-    type : String, // technical or behavioral
-    enum : ["low", "medium", "high"]
-}]
-* preparation plan : [{
-    day : Number,
-    focus : String,
-    tasks : [String]
-}]
-*/
+const mongoose = require("mongoose");
 
 const technicalQuestionSchema = new mongoose.Schema(
   {
     question: {
       type: String,
-      required: [true, "Question is required"],
+      required: [true, "Technical question is required"],
     },
     intention: {
       type: String,
       required: [true, "Intention is required"],
     },
-    feedback: {
+    answer: {
       type: String,
-      required: [true, "Feedback is required"],
+      required: [true, "Answer is required"],
     },
   },
   {
-    _id: false, // Disable _id for subdocuments
+    _id: false,
   },
 );
 
@@ -55,19 +24,19 @@ const behavioralQuestionSchema = new mongoose.Schema(
   {
     question: {
       type: String,
-      required: [true, "Question is required"],
+      required: [true, "Behavioral question is required"],
     },
     intention: {
       type: String,
       required: [true, "Intention is required"],
     },
-    feedback: {
+    answer: {
       type: String,
-      required: [true, "Feedback is required"],
+      required: [true, "Answer is required"],
     },
   },
   {
-    _id: false, // Disable _id for subdocuments
+    _id: false,
   },
 );
 
@@ -79,60 +48,70 @@ const skillGapSchema = new mongoose.Schema(
     },
     severity: {
       type: String,
-      required: [true, "Severity is required"],
       enum: ["low", "medium", "high"],
+      required: [true, "Severity is required"],
     },
   },
   {
-    _id: false, // Disable _id for subdocuments
+    _id: false,
   },
 );
 
-const preparationPlanSchema = new mongoose.Schema(
-  {
-    day: {
-      type: Number,
-      required: [true, "Day is required"],
-    },
-    focus: {
-      type: String,
-      required: [true, "Focus is required"],
-    },
-    tasks: {
-      type: [String],
-      required: [true, "Tasks are required"],
-    },
-  },
-  {
-    _id: false, // Disable _id for subdocuments
-  },
-);
-
-const interviewReportSchema = new mongoose.Schema({
-  jobDescription: {
-    type: String,
-    required: true,
-  },
-  resume: {
-    type: String,
-  },
-  selfDescription: {
-    type: String,
-  },
-  matchScore: {
+const preparationPlanSchema = new mongoose.Schema({
+  day: {
     type: Number,
-    min: 0,
-    max: 100,
+    required: [true, "Day is required"],
   },
-  technicalQuestionSchema: [technicalQuestionSchema],
-  behavioralQuestionSchema: [behavioralQuestionSchema],
-  skillGapSchema: [skillGapSchema],
-  preparationPlanSchema: [preparationPlanSchema],
+  focus: {
+    type: String,
+    required: [true, "Focus is required"],
+  },
+  tasks: [
+    {
+      type: String,
+      required: [true, "Task is required"],
+    },
+  ],
 });
+
+const interviewReportSchema = new mongoose.Schema(
+  {
+    jobDescription: {
+      type: String,
+      required: [true, "Job description is required"],
+    },
+    resume: {
+      type: String,
+    },
+    selfDescription: {
+      type: String,
+    },
+    matchScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+    technicalQuestions: [technicalQuestionSchema],
+    behavioralQuestions: [behavioralQuestionSchema],
+    skillGaps: [skillGapSchema],
+    preparationPlan: [preparationPlanSchema],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+    title: {
+      type: String,
+      required: [true, "Job title is required"],
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
 const interviewReportModel = mongoose.model(
   "InterviewReport",
   interviewReportSchema,
 );
 
-export default interviewReportModel;
+module.exports = interviewReportModel;

@@ -1,6 +1,6 @@
-import express from "express";
-import authController from "../controllers/auth.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
+const express = require("express");
+const authController = require("../controllers/auth.controller.js");
+const { authUser } = require("../middleware/auth.middleware.js");
 
 //-------------------------------
 
@@ -14,7 +14,7 @@ const authRouter = express.Router();
  * @desc Register a new user
  * @access Public
  */
-authRouter.post("/register", authController.registerUser);
+authRouter.post("/register", authController.registerUserController);
 
 //-------------------------------
 
@@ -23,7 +23,7 @@ authRouter.post("/register", authController.registerUser);
  * @desc Login a user with email and password, generate a JWT token, and set it in an HTTP-only cookie
  * @access Public
  */
-authRouter.post("/login", authController.loginUser);
+authRouter.post("/login", authController.loginUserController);
 
 //-------------------------------
 
@@ -32,7 +32,7 @@ authRouter.post("/login", authController.loginUser);
  * @description Logout a user by invalidating the JWT token (e.g., by adding it to a blacklist) and clearing the cookie
  * @access Public
  */
-authRouter.get("/logout", authController.logoutUser);
+authRouter.get("/logout", authController.logoutUserController);
 
 //-------------------------------
 
@@ -41,6 +41,6 @@ authRouter.get("/logout", authController.logoutUser);
  * @description Get the profile of the currently logged-in user (requires authentication)
  * @access Private
  */
-authRouter.get("/profile", authMiddleware, authController.getUserProfile);
+authRouter.get("/profile", authUser, authController.getMeController);
 
-export default authRouter;
+module.exports = authRouter;
